@@ -1,6 +1,6 @@
 let humanScore = 0;
 let computerScore = 0;
-
+let n = 0;
 
 //computer choice
 function getComputerChoise() {
@@ -38,12 +38,12 @@ function playRound (compChoise, humChoise) {
 
         if (humChoise === "paper"){
             humanScore++;
-            return "Player Wins"; 
+            return "Player wins the round"; 
         }
 
         else {
             computerScore++;
-            return "Computer Wins"; 
+            return "Computer wins the round"; 
         }
     }
 
@@ -51,10 +51,10 @@ function playRound (compChoise, humChoise) {
 
         if(humChoise === "scissor") {
             humanScore++;
-            return "Player Wins"; 
+            return "Player wins the round"; 
         }
         else {
-            return "Computer Wins";
+            return "Computer wins the round";
             computerScore++;
             
         }
@@ -62,20 +62,38 @@ function playRound (compChoise, humChoise) {
     else if(compChoise === "scissor") {
         if(humChoise === "rock") {
             humanScore++;
-             return "Player Wins"; 
+             return "Player wins the round"; 
         }  
         else {
             computerScore++;
-            return "Computer Wins";  
+            return "Computer wins the round";  
         }  
 
     }
 }
 
-const ch1 = getComputerChoise();
-const ch2 = getHumanChoise();
-console.log(ch1);
-console.log(ch2);
+//Play 5 rounds and add the scores
 
-console.log(playRound(ch1, ch2));
+function playGame(roundNo) {
+ const humanSelect = getHumanChoise();
+ const compSelect = getComputerChoise();
+ console.log("Round " + roundNo );
+ console.log(playRound(humanSelect, compSelect));   
+}
 
+while (n < 5) {
+playGame(n+1);
+n++;
+}
+
+console.log("Scores");
+console.log("........");
+console.log("Player: " +humanScore);
+console.log("Computer: " +computerScore);
+
+if(humanScore > computerScore) {
+    console.log("Player Wins the Game!!!")
+}
+else {
+    console.log("Computer Wins the Game!!!")
+}
