@@ -1,99 +1,81 @@
-let humanScore = 0;
+function getRandomComputerResult() {
+  const options = ["Rock", "Paper", "Scissors"];
+  const randomIndex = Math.floor(Math.random() * options.length);
+  return options[randomIndex];
+}
+
+function hasPlayerWonTheRound(player, computer) {
+  return (
+    (player === "Rock" && computer === "Scissors") ||
+    (player === "Scissors" && computer === "Paper") ||
+    (player === "Paper" && computer === "Rock")
+  );
+}
+
+let playerScore = 0;
 let computerScore = 0;
-let n = 0;
 
-//computer choice
-function getComputerChoise() {
-    const n = Math.floor(Math.random() * 3);
-    if(n===0) {
-        return "rock";
-    }
+function getRoundResults(userOption) {
+  const computerResult = getRandomComputerResult();
 
-    else if (n===1){
-         return "paper";
-    }
-
-    else {
-        return "scissor";
-    }
+  if (hasPlayerWonTheRound(userOption, computerResult)) {
+    playerScore++;
+    return `Player wins! ${userOption} beats ${computerResult}`;
+  } else if (computerResult === userOption) {
+    return `It's a tie! Both chose ${userOption}`;
+  } else {
+    computerScore++;
+    return `Computer wins! ${computerResult} beats ${userOption}`;
+  }
 }
 
+const playerScoreSpanElement = document.getElementById("player-score");
+const computerScoreSpanElement = document.getElementById("computer-score");
+const roundResultsMsg = document.getElementById("results-msg");
+const winnerMsgElement = document.getElementById("winner-msg");
+const optionsContainer = document.querySelector(".options-container");
+const resetGameBtn = document.getElementById("reset-game-btn");
 
-//get human choises
+function showResults(userOption) {
+  roundResultsMsg.innerText = getRoundResults(userOption);
+  computerScoreSpanElement.innerText = computerScore;
+  playerScoreSpanElement.innerText = playerScore;
 
-function getHumanChoise() {
-    const humanInput = window.prompt("Enter your choise ");
-    const humanChoise = humanInput.toLowerCase();
-    return humanChoise;
-}
+  if (playerScore === 3 || computerScore === 3) {
+    winnerMsgElement.innerText = `${
+      playerScore === 3 ? "Player" : "Computer"
+    } has won the game!`;
 
-//Playing a round 
+    resetGameBtn.style.display = "block";
+    optionsContainer.style.display = "none";
+  }
 
-function playRound (compChoise, humChoise) {
-    if(compChoise === humChoise) {
-         return "Draw";
-        
-    }
-    else if(compChoise === "rock") {
+};
+function resetGame() {
+playerScore = 0;
+computerScore = 0;
+playerScoreSpanElement.innerText = 0;
+computerScoreSpanElement.innerText = 0;
+resetGameBtn.style.display = "none";
+optionsContainer.style.display = "block";
+winnerMsgElement.innerText = "";
+roundResultsMsg.innerText = "";
+};
 
-        if (humChoise === "paper"){
-            humanScore++;
-            return "Player wins the round"; 
-        }
+resetGameBtn.addEventListener("click", resetGame);
 
-        else {
-            computerScore++;
-            return "Computer wins the round"; 
-        }
-    }
+const rockBtn = document.getElementById("rock-btn");
+const paperBtn = document.getElementById("paper-btn");
+const scissorsBtn = document.getElementById("scissors-btn");
 
-    else if(compChoise === "paper") {
+rockBtn.addEventListener("click", function () {
+  showResults("Rock");
+});
 
-        if(humChoise === "scissor") {
-            humanScore++;
-            return "Player wins the round"; 
-        }
-        else {
-            return "Computer wins the round";
-            computerScore++;
-            
-        }
-    }
-    else if(compChoise === "scissor") {
-        if(humChoise === "rock") {
-            humanScore++;
-             return "Player wins the round"; 
-        }  
-        else {
-            computerScore++;
-            return "Computer wins the round";  
-        }  
+paperBtn.addEventListener("click", function () {
+  showResults("Paper");
+});
 
-    }
-}
-
-//Play 5 rounds and add the scores
-
-function playGame(roundNo) {
- const humanSelect = getHumanChoise();
- const compSelect = getComputerChoise();
- console.log("Round " + roundNo );
- console.log(playRound(humanSelect, compSelect));   
-}
-
-while (n < 5) {
-playGame(n+1);
-n++;
-}
-
-console.log("Scores");
-console.log("........");
-console.log("Player: " +humanScore);
-console.log("Computer: " +computerScore);
-
-if(humanScore > computerScore) {
-    console.log("Player Wins the Game!!!")
-}
-else {
-    console.log("Computer Wins the Game!!!")
-}
+scissorsBtn.addEventListener("click", function () {
+  showResults("Scissors");
+});
